@@ -20,18 +20,12 @@ drawhm <- function (hm){
 }
 
 drawbar <- function (bar){
-  columns <- reactive({
-    
-  })
-  observeEvent(columns(),{
-    ggplot(bar, aes(Label, Value)) + 
-      geom_col(aes(fill=Label)) + 
-      geom_text(aes(label=Label, y= Value)) + 
+    ggplot(bar, aes(input$selectedcolx, input$selectedcoy)) + 
+      geom_col(aes(fill=input$selectedcolx)) + 
+      geom_text(aes(label=input$selectedcolx, y= input$selectedcoy)) + 
       coord_flip()
-  })
-  ## TODO: need to deal with names with flexibility
- 
 }
+  ## TODO: need to deal with names with flexibility
 
 draw1 <- function(data) {
   if (data$type=='tree') {
@@ -42,17 +36,21 @@ draw1 <- function(data) {
     drawbar(data$data)
   }
 }
+
 draw <- function (data) {
   ## TODO: sort the list so the tree plot is always the first
+  sort.list(data$data$Value, decreasing = TRUE)
   th = theme(legend.position = "top")
   print(data)
   if (length(data) == 0) {
-    g <- ggplot(data.frame(x = 0, y = 0, text = "No data yet")) + geom_text(aes(x = x, y= y, label = text))
+    g <- ggplot(data.frame(x = 0, y = 0, 
+                           text = "No data yet")) + geom_text(aes(x = x, y= y, label = text))
   } else if (length(data)==1){
     g <- draw1(data[[1]])
   } else if (length(data)>1) {
     ## TODO: only keep one figure for tree plot
     ## TODO: make sure there is at least one tree plot
+    
     g <- draw1(data[[1]])
     row.order = get_taxa_order(g) # from top to bottom
     for (i in 2:length(data)) {
@@ -65,7 +63,7 @@ draw <- function (data) {
   g
 }
 
-if (FALSE) {
+if (T) {
   testDraw <- function() {
     # setwd("~/Downloads/Jennifer/")
     d = list(
