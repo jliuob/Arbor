@@ -50,7 +50,7 @@ draw <- function (data) {
   } else if (length(data)>1) {
     ## TODO: only keep one figure for tree plot
     ## TODO: make sure there is at least one tree plot
-    if (data[[1]]$type='tree'){
+    if (data[[1]]$type=='tree'){
       g <- draw1(data[[1]])
       row.order = get_taxa_order(g) # from top to bottom
       for (i in 2:length(data)) {
