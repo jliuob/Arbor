@@ -39,7 +39,7 @@ draw1 <- function(data) {
 
 draw <- function (data) {
   ## TODO: sort the list so the tree plot is always the first
-  sort.list(data$data$Value, decreasing = TRUE)
+  sort.list(data$type, decreasing = TRUE)
   th = theme(legend.position = "top")
   print(data)
   if (length(data) == 0) {
