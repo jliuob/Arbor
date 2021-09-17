@@ -50,14 +50,17 @@ draw <- function (data) {
   } else if (length(data)>1) {
     ## TODO: only keep one figure for tree plot
     ## TODO: make sure there is at least one tree plot
-    
-    g <- draw1(data[[1]])
-    row.order = get_taxa_order(g) # from top to bottom
-    for (i in 2:length(data)) {
-      data[[i]]$data$Label = factor(data[[i]]$data$Label, level = rev(row.order))
-      g2 <- draw1(data[[i]])
-      g2 <- g2 + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
-      g <- g + g2 * th
+    if (data[[1]]$type='tree'){
+      g <- draw1(data[[1]])
+      row.order = get_taxa_order(g) # from top to bottom
+      for (i in 2:length(data)) {
+        data[[i]]$data$Label = factor(data[[i]]$data$Label, level = rev(row.order))
+        g2 <- draw1(data[[i]])
+        g2 <- g2 + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
+        g <- g + g2 * th
+      }
+    } else {
+      NULL
     }
   }
   g
