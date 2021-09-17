@@ -9,28 +9,56 @@ source('draw-functions.R')
 
 aList=list()
 
+uploads <- tabsetPanel(
+  id = "uploads",
+  type = "hidden",
+  tabPanel("hm",
+           fileInput("hmfile", "Heatmap", buttonLabel = "Upload", 
+                     accept = ".csv")
+  ),
+  tabPanel("bar",
+           fileInput("barfile", "Bar Plot", buttonLabel = "Upload", 
+                     accept = ".csv")
+  )
+)
+
 ui <- fluidPage(
   # Application title
   titlePanel("Tree Data Visualization"),
   
-  fluidRow(
-    column(4,
-           fileInput("treefile", "Tree", buttonLabel = "Upload", 
-                     accept = ".nwk")),  # multiple=T: upload multiple files
-    column(4,
-           fileInput("hmfile", "Heatmap", buttonLabel = "Upload", 
-                     accept = ".csv")),  
-    column(4,
-           fileInput("barfile", "Bar Plot", buttonLabel = "Upload", 
-                     accept = ".csv")),
-            selectInput('headers','Headers',choice=unique(barfile))),
-  fluidRow(
-    column(12, plotOutput("tree"))
+  sidebarLayout(
+    sidebarPanel(
+      fileInput("treefile", "Tree", buttonLabel = "Upload", 
+                accept = ".nwk")),  # multiple=T: upload multiple files
+      uploads,
+    ),
+  mainPanel(
+    plotOutput("tree")
   )
 )
 
+  # TODO download
+  # downloadButton("Download")
+  # ...
+
 server <- function(input, output, session) { 
+  observeEvent(input$treefile,{
+    updateTabsetPanel(inputId = 'uploads')
+  })
+
   output$tree <- renderPlot({
+    bar <- reactiveValues(mydata=NULL)
+    observeEvent(input$barfile, {
+      bar$mydata<-read.csv(file=input$barfile$datapath)
+      freezeReactiveValue(input, "selectedcolx")
+      freezeReactiveValue(input, "selectedcoly")
+      updateSelectInput(inputId = 'selectedcolx', 
+                        label = 'Select x column', 
+                        choices  = colnames(bar$mydata))
+      updateSelectInput(inputId = 'selectedcoly', 
+                        label = 'Select y column', 
+                        choices  = colnames(bar$mydata))
+    })
 
     g<-reactive({   # list
       if (!is.null(input$treefile)){
@@ -54,5 +82,3 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
-
-
