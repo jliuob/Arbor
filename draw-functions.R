@@ -25,6 +25,7 @@ drawbar <- function (bar){
     geom_text(aes(label=Label, y= Value)) + 
     coord_flip() 
   
+  # updated but doesn't work:
     ggplot(bar, aes(input$selectedcolx, input$selectedcoly)) + 
       geom_col(aes(fill=input$selectedcolx)) + 
       geom_text(aes(label=input$selectedcolx, y=input$selectedcoly)) + 
