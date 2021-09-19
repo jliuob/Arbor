@@ -11,12 +11,10 @@ aList=list()
 
 uploads <- tabsetPanel(
   id = "uploads",
-  type = "hidden",
-  tabPanel("hm",
+  type = 'hidden',
+  tabPanel("file",
            fileInput("hmfile", "Heatmap", buttonLabel = "Upload", 
-                     accept = ".csv")
-  ),
-  tabPanel("bar",
+                     accept = ".csv"),
            fileInput("barfile", "Bar Plot", buttonLabel = "Upload", 
                      accept = ".csv")
   )
@@ -36,16 +34,12 @@ ui <- fluidPage(
     plotOutput("tree")
   )
 )
-
   # TODO download
   # downloadButton("Download")
   # ...
 
 server <- function(input, output, session) { 
-  observeEvent(input$treefile,{
-    updateTabsetPanel(inputId = 'uploads')
-  })
-
+  
   output$tree <- renderPlot({
     bar <- reactiveValues(mydata=NULL)
     observeEvent(input$barfile, {
