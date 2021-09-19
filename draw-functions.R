@@ -20,9 +20,14 @@ drawhm <- function (hm){
 }
 
 drawbar <- function (bar){
-    ggplot(bar, aes(input$selectedcolx, input$selectedcoy)) + 
+  ggplot(bar, aes(Label, Value)) + 
+    geom_col(aes(fill=Label)) + 
+    geom_text(aes(label=Label, y= Value)) + 
+    coord_flip() 
+  
+    ggplot(bar, aes(input$selectedcolx, input$selectedcoly)) + 
       geom_col(aes(fill=input$selectedcolx)) + 
-      geom_text(aes(label=input$selectedcolx, y= input$selectedcoy)) + 
+      geom_text(aes(label=input$selectedcolx, y=input$selectedcoly)) + 
       coord_flip()
 }
   ## TODO: need to deal with names with flexibility
@@ -39,7 +44,6 @@ draw1 <- function(data) {
 
 draw <- function (data) {
   ## TODO: sort the list so the tree plot is always the first
-  sort.list(data$type, decreasing = TRUE)
   th = theme(legend.position = "top")
   print(data)
   if (length(data) == 0) {
@@ -50,7 +54,6 @@ draw <- function (data) {
   } else if (length(data)>1) {
     ## TODO: only keep one figure for tree plot
     ## TODO: make sure there is at least one tree plot
-    if (data[[1]]$type=='tree'){
       g <- draw1(data[[1]])
       row.order = get_taxa_order(g) # from top to bottom
       for (i in 2:length(data)) {
@@ -59,9 +62,6 @@ draw <- function (data) {
         g2 <- g2 + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
         g <- g + g2 * th
       }
-    } else {
-      NULL
-    }
   }
   g
 }
