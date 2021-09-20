@@ -4,34 +4,33 @@ library(ggtree)
 library(ggplot2)
 library(ggimage)
 library(aplot)
+library(shinyjs)
 devtools::install_github("YuLab-SMU/ggtree")
 source('draw-functions.R')
 
 aList=list()
 
-uploads <- tabsetPanel(
-  id = "uploads",
-  type = 'hidden',
-  tabPanel("file",
-           fileInput("hmfile", "Heatmap", buttonLabel = "Upload", 
-                     accept = ".csv"),
-           fileInput("barfile", "Bar Plot", buttonLabel = "Upload", 
-                     accept = ".csv")
-  )
-)
-
 ui <- fluidPage(
+  useShinyjs(),
+  
   # Application title
   titlePanel("Tree Data Visualization"),
   
-  sidebarLayout(
-    sidebarPanel(
-      fileInput("treefile", "Tree", buttonLabel = "Upload", 
-                accept = ".nwk")),  # multiple=T: upload multiple files
-      uploads,
+  fluidRow(
+    column(4,
+           fileInput("treefile", "Tree", buttonLabel = "Upload", 
+                     accept = ".nwk")),  # multiple=T: upload multiple files
+    column(4,
+           disabled(
+            fileInput("hmfile", "Heatmap", buttonLabel = "Upload", 
+                       accept = ".csv"))),  
+      column(4,
+             disabled(
+               fileInput("barfile", "Bar Plot", buttonLabel = "Upload", 
+                                accept = ".csv")))
     ),
-  mainPanel(
-    plotOutput("tree")
+  fluidRow(
+    column(12, plotOutput("figure"))
   )
 )
   # TODO download
@@ -39,11 +38,16 @@ ui <- fluidPage(
   # ...
 
 server <- function(input, output, session) { 
+  observeEvent(input$treefile,{
+    enable('hmfile')
+    enable('barfile')
+  })
   
   output$tree <- renderPlot({
     bar <- reactiveValues(mydata=NULL)
     observeEvent(input$barfile, {
       bar$mydata<-read.csv(file=input$barfile$datapath)
+      
       freezeReactiveValue(input, "selectedcolx")
       freezeReactiveValue(input, "selectedcoly")
       updateSelectInput(inputId = 'selectedcolx', 
@@ -76,3 +80,4 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
