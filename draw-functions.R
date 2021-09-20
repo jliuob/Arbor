@@ -25,7 +25,6 @@ drawbar <- function (bar){
     geom_text(aes(label=Label, y= Value)) + 
     coord_flip() 
   
-  # updated but doesn't work:
     ggplot(bar, aes(input$selectedcolx, input$selectedcoly)) + 
       geom_col(aes(fill=input$selectedcolx)) + 
       geom_text(aes(label=input$selectedcolx, y=input$selectedcoly)) + 
@@ -45,6 +44,8 @@ draw1 <- function(data) {
 
 draw <- function (data) {
   ## TODO: sort the list so the tree plot is always the first
+  sort.list
+  #new list
   th = theme(legend.position = "top")
   print(data)
   if (length(data) == 0) {
@@ -54,6 +55,7 @@ draw <- function (data) {
     g <- draw1(data[[1]])
   } else if (length(data)>1) {
     ## TODO: only keep one figure for tree plot
+    # replace by the new tree
     ## TODO: make sure there is at least one tree plot
       g <- draw1(data[[1]])
       row.order = get_taxa_order(g) # from top to bottom
