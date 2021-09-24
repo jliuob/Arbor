@@ -31,44 +31,29 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) { 
-    
     plotInput <- reactive({
-        g<-reactive({   # list
-            if (!is.null(input$treefile)){
-                aList[[length(aList)+1]]=list(type='tree', data=read.tree(input$treefile$datapath))
-            }
-            
-            if (!is.null(input$hmfile)){
-                aList[[length(aList)+1]]=list(type='heatmap', data=read.csv(input$hmfile$datapath))
-            }
-            
-            if (!is.null(input$barfile)){
-                aList[[length(aList)+1]]=list(type='barplot', data=read.csv(input$hmfile$datapath))
-            }
-            #print(aList)
-        })
-        p<-draw(g())
+        draw(g())
+    })
+    
+    g<-reactive({   # list
+        cat("g is called,",length(aList),'\n')
+        print(aList)
+        if (!is.null(input$treefile)){
+            aList[[length(aList)+1]]=list(type='tree', data=read.tree(input$treefile$datapath))
+        }
+        
+        if (!is.null(input$hmfile)){
+            aList[[length(aList)+1]]=list(type='heatmap', data=read.csv(input$hmfile$datapath))
+        }
+        
+        if (!is.null(input$barfile)){
+            aList[[length(aList)+1]]=list(type='barplot', data=read.csv(input$barfile$datapath))
+        }
+        #print(aList)
     })
     
     output$figure <- renderPlot({
-        g<-reactive({   # list
-            if (!is.null(input$treefile)){
-                aList[[length(aList)+1]]=list(type='tree', data=read.tree(input$treefile$datapath))
-            }
-            
-            if (!is.null(input$hmfile)){
-                aList[[length(aList)+1]]=list(type='heatmap', data=read.csv(input$hmfile$datapath))
-            }
-            
-            if (!is.null(input$barfile)){
-                aList[[length(aList)+1]]=list(type='barplot', data=read.csv(input$hmfile$datapath))
-            }
-            #print(aList)
-            
-        })
-        
         draw(g())
-        
     }, res = 96)
     
     output$download <- downloadHandler(
