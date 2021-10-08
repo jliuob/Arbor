@@ -8,30 +8,32 @@ source('helper.R')
 
 drawtree <- function (tr) {
   ggtree(
-    tr,
+    tr, 
     layout = "roundrect",
-    color = "firebrick",
+    color = "navyblue",
     size = 2,
     ladderize = TRUE
   ) +
-    geom_tiplab(colour = "firebrick",
+    geom_tiplab(colour = "navyblue",
                 size = 10,
                 align = TRUE) +
-    geom_tippoint(color = "orange", size = 2) +
-    geom_rootedge(color = "firebrick", size = 2)
+    geom_tippoint(color = "orange", size = 3) +
+    geom_rootedge(color = "navyblue", size = 2) +
+    theme_tree2() 
 }
 
 drawhm <- function (hm) {
   print(hm)
   ggplot(hm, aes(x = Category, y = Label)) +
     geom_tile(aes(fill = Value)) + scale_fill_viridis_c()
-}
+} 
 
 drawbar <- function (bar) {
   ggplot(bar, aes(Label, Value)) +
     geom_col(aes(fill = Label)) +
     geom_text(aes(label = Label, y = Value)) +
-    coord_flip()
+    coord_flip() +
+    scale_fill_viridis_d(option="D", name="discrete\nvalue")
 }
 
 ## TODO: need to deal with names with flexibility
@@ -48,8 +50,19 @@ draw1 <- function(data) {
 
 draw <- function (data) {
   ## TODO: sort the list so the tree plot is always the first
-  sort.list
-  #new list
+  for (i in 1:length(data)) {
+    if (data[[i]]$type=='tree') {
+      data[i]$order=1
+    } 
+    else if (data[[i]]$type=='heatmap') {
+      data[i]$order=2
+    } 
+    else (data[[i]]$type=='barplot') {
+      data[i]$order=3
+    }
+  }
+  data=sort.list(data$order)
+  
   th = theme(legend.position = "top")
   print(data)
   if (length(data) == 0) {
@@ -59,6 +72,7 @@ draw <- function (data) {
     g <- draw1(data[[1]])
   } else if (length(data) > 1) {
     ## TODO: only keep one figure for tree plot
+    data[[1]]
     # replace by the new tree
     ## TODO: make sure there is at least one tree plot
     g <- draw1(data[[1]])

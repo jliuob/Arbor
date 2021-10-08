@@ -4,14 +4,21 @@ library(ggtree)
 library(ggplot2)
 library(ggimage)
 library(aplot)
+library(bslib)
+library(thematic)
 devtools::install_github("YuLab-SMU/ggtree")
 source('draw-functions.R')
 
 aList = list()
 
+mytheme <- bs_theme(bootswatch = "cerulean",
+                    base_font = font_google("Barlow"))
+
 ui <- fluidPage(
     # Application title
     titlePanel("Tree Data Visualization"),
+    # themes
+    theme = mytheme,
     
     fluidRow(
         column(
@@ -19,7 +26,7 @@ ui <- fluidPage(
             fileInput("treefile", "Tree", buttonLabel = "Upload",
                       accept = ".nwk")
         ),
-        # multiple=T: upload multiple files
+        
         column(
             4,
             fileInput(
@@ -35,16 +42,21 @@ ui <- fluidPage(
                 "barfile",
                 "Bar Plot",
                 buttonLabel = "Upload",
-                accept = ".csv"
+                accept = ".csv",
             )
         )
     ),
+    
     fluidRow(column(12, plotOutput("figure"))),
-    # TODO download
-    downloadButton("download", 'Download')
+    
+    fluidRow(column(width = 2, offset = 5, 
+                    downloadButton("download", 'Download'))),
 )
 
+
 server <- function(input, output, session) {
+    thematic::thematic_shiny()
+    
     plotInput <- reactive({
         draw(g())
     })
