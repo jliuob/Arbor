@@ -6,56 +6,67 @@ library(ggimage)
 library(aplot)
 library(bslib)
 library(thematic)
-devtools::install_github("YuLab-SMU/ggtree")
+library(shinydashboard)
+#devtools::install_github("YuLab-SMU/ggtree")
 source('draw-functions.R')
 
 aList = list()
 
-mytheme <- bs_theme(bootswatch = "cerulean",
-                    base_font = font_google("Barlow"))
-
-ui <- fluidPage(
-    # Application title
-    titlePanel("Tree Data Visualization"),
-    # themes
-    theme = mytheme,
+ui <- dashboardPage(
     
-    fluidRow(
-        column(
-            4,
-            fileInput("treefile", "Tree", buttonLabel = "Upload",
-                      accept = ".nwk")
-        ),
-        
-        column(
-            4,
-            fileInput(
-                "hmfile",
-                "Heatmap",
-                buttonLabel = "Upload",
-                accept = ".csv"
-            )
-        ),
-        column(
-            4,
-            fileInput(
-                "barfile",
-                "Bar Plot",
-                buttonLabel = "Upload",
-                accept = ".csv",
-            )
+    dashboardHeader(title = "Tree Data Visualization"),
+    
+    dashboardSidebar(
+        sidebarMenu(
+            menuItem('Introduction', tabName = 'introduction', icon = icon('book-open')),
+            menuItem("Data Upload", tabName = "upload", icon = icon("upload")),
+            menuItem("Plots", tabName = "plot", icon = icon("th"))
         )
     ),
     
-    fluidRow(column(12, plotOutput("figure"))),
-    
-    fluidRow(column(width = 2, offset = 5, 
-                    downloadButton("download", 'Download'))),
-)
-
+    dashboardBody(
+        tabItems(
+            tabItem(tabName = "introduction",
+                    'Tree data visualization is a R shiny app for 
+                    viewing tree data and its plots by simply uploading 
+                    tree data and csv columns in Data Upload, and then 
+                    the plots would be shown in Plots. Only .nwk is accepted 
+                    for tree data upload. Only .csv is accepted for both 
+                    heat map and bar plot data upload. Users are also 
+                    welcomed to download the plots if needed.'
+                    ),
+            
+            tabItem(tabName = "upload",
+                    fluidRow(
+                        box(fileInput("treefile", 
+                                         "Tree", 
+                                         buttonLabel = "Upload",
+                                         accept = ".nwk")
+                        ),
+                        
+                        box(fileInput("hmfile",
+                                            "Heatmap",
+                                            buttonLabel = "Upload",
+                                            accept = ".csv")
+                        ),
+                        
+                        box(fileInput("barfile",
+                                           "Bar Plot",
+                                           buttonLabel = "Upload",
+                                           accept = ".csv",)
+                        )
+                    )
+            ),
+        
+            tabItem(tabName = "plot",
+                fluidRow(column(12, plotOutput("figure"))),
+                fluidRow(column(width = 2, offset = 5, 
+                                downloadButton("download", 'Download'))),
+        )
+    )
+))
 
 server <- function(input, output, session) {
-    thematic::thematic_shiny()
     
     plotInput <- reactive({
         draw(g())
