@@ -7,6 +7,7 @@ library(aplot)
 library(bslib)
 library(thematic)
 library(shinydashboard)
+library(shinyjs)
 #devtools::install_github("YuLab-SMU/ggtree")
 source('draw-functions.R')
 
@@ -38,25 +39,37 @@ ui <- dashboardPage(
             
             tabItem(tabName = "upload",
                     fluidRow(
-                        box(fileInput("treefile", 
-                                         "Tree", 
+                        column(width = 6,
+                        box(title = 'Tree', width = NULL,
+                            status = "primary", solidHeader = TRUE,
+                            fileInput("treefile", 
+                                         "", 
                                          buttonLabel = "Upload",
                                          accept = ".nwk")
-                        ),
-                        
-                        box(fileInput("hmfile",
-                                            "Heatmap",
+                        )),
+                    
+                        column(width = 6,
+                        box(title = 'Heatmap', width = NULL,
+                            status = "primary", solidHeader = TRUE,
+                            collapsible = TRUE,
+                            shinyjs::useShinyjs(),
+                            fileInput("hmfile",
+                                            "",
                                             buttonLabel = "Upload",
                                             accept = ".csv")
                         ),
                         
-                        box(fileInput("barfile",
-                                           "Bar Plot",
+                        box(title = 'Bar Plot', width = NULL,
+                            status = "primary", solidHeader = TRUE,
+                            collapsible = TRUE,
+                            shinyjs::useShinyjs(),
+                            fileInput("barfile",
+                                           "",
                                            buttonLabel = "Upload",
                                            accept = ".csv",)
                         )
                     )
-            ),
+            )),
         
             tabItem(tabName = "plot",
                 fluidRow(column(12, plotOutput("figure"))),
@@ -90,6 +103,14 @@ server <- function(input, output, session) {
         }
         print(aList)
     })
+    
+    shinyjs::disable('hmfile')
+    shinyjs::disable('barfile')
+    
+    observeEvent(
+        req (input$treefile),
+        shinyjs::enable('hmfile'),
+        shinyjs::enable('barfile'))
     
     output$figure <- renderPlot({
         draw(g())

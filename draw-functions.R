@@ -49,20 +49,22 @@ draw1 <- function(data) {
 }
 
 draw <- function (data) {
-  ## TODO: sort the list so the tree plot is always the first
-  for (i in 1:length(data)) {
+  save(data, file="data.Rdata")
+  for (i in seq_along(data)) {
     if (data[[i]]$type=='tree') {
-      data[i]$order=1
-    } 
-    else if (data[[i]]$type=='heatmap') {
-      data[i]$order=2
-    } 
-    else (data[[i]]$type=='barplot') {
-      data[i]$order=3
+      data[[i]]$order=1
+    } else if (data[[i]]$type=='heatmap') {
+      data[[i]]$order=2
+    } else if (data[[i]]$type=='barplot') {
+      data[[i]]$order=3
     }
   }
-  data=sort.list(data$order)
   
+  if (length(data)>0){
+    ord<-order(unlist(lapply(data, function(x){x$order})))
+    data<-data[ord]
+  }
+      
   th = theme(legend.position = "top")
   print(data)
   if (length(data) == 0) {
@@ -71,19 +73,23 @@ draw <- function (data) {
   } else if (length(data) == 1) {
     g <- draw1(data[[1]])
   } else if (length(data) > 1) {
+    if (data[[1]]$type=='tree'){
+      g <- draw1(data[[1]])
+      row.order = get_taxa_order(g) # from top to bottom
+      for (i in 2:length(data)) {
+        data[[i]]$data$Label = factor(data[[i]]$data$Label, level = rev(row.order))
+        g2 <- draw1(data[[i]])
+        g2 <-
+          g2 + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
+        g <- g + g2 * th
+      }
+    } else {
+      g <- ggplot(data.frame(x = 0, y = 0,
+                             text = "Please upload tree data first")) + geom_text(aes(x = x, y = y, label = text))
+    }
     ## TODO: only keep one figure for tree plot
-    data[[1]]
     # replace by the new tree
     ## TODO: make sure there is at least one tree plot
-    g <- draw1(data[[1]])
-    row.order = get_taxa_order(g) # from top to bottom
-    for (i in 2:length(data)) {
-      data[[i]]$data$Label = factor(data[[i]]$data$Label, level = rev(row.order))
-      g2 <- draw1(data[[i]])
-      g2 <-
-        g2 + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
-      g <- g + g2 * th
-    }
   }
   g
 }
