@@ -48,6 +48,11 @@ draw1 <- function(data) {
   }
 }
 
+treefirst <- function(data) {
+  ggplot(data.frame(x = 0, y = 0,text = "Please upload tree data first")) + 
+    geom_text(aes(x = x, y = y, label = text))
+}
+
 draw <- function (data) {
   save(data, file="data.Rdata")
   for (i in seq_along(data)) {
@@ -71,10 +76,15 @@ draw <- function (data) {
     g <- ggplot(data.frame(x = 0, y = 0,
                            text = "No data yet")) + geom_text(aes(x = x, y = y, label = text))
   } else if (length(data) == 1) {
-    g <- draw1(data[[1]])
+    if (data[[1]]$type=='tree') {
+      g <- draw1(data[[1]])
+    } else {
+      g <- treefirst()
+      }
   } else if (length(data) > 1) {
     if (data[[1]]$type=='tree'){
       g <- draw1(data[[1]])
+      
       row.order = get_taxa_order(g) # from top to bottom
       for (i in 2:length(data)) {
         data[[i]]$data$Label = factor(data[[i]]$data$Label, level = rev(row.order))
@@ -84,12 +94,10 @@ draw <- function (data) {
         g <- g + g2 * th
       }
     } else {
-      g <- ggplot(data.frame(x = 0, y = 0,
-                             text = "Please upload tree data first")) + geom_text(aes(x = x, y = y, label = text))
-    }
+      g <- treefirst()
+      }
     ## TODO: only keep one figure for tree plot
     # replace by the new tree
-    ## TODO: make sure there is at least one tree plot
   }
   g
 }

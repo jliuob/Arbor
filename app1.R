@@ -49,10 +49,10 @@ ui <- dashboardPage(
                         )),
                     
                         column(width = 6,
+                               # shinyjs::useShinyjs(),
                         box(title = 'Heatmap', width = NULL,
                             status = "primary", solidHeader = TRUE,
                             collapsible = TRUE,
-                            shinyjs::useShinyjs(),
                             fileInput("hmfile",
                                             "",
                                             buttonLabel = "Upload",
@@ -62,7 +62,6 @@ ui <- dashboardPage(
                         box(title = 'Bar Plot', width = NULL,
                             status = "primary", solidHeader = TRUE,
                             collapsible = TRUE,
-                            shinyjs::useShinyjs(),
                             fileInput("barfile",
                                            "",
                                            buttonLabel = "Upload",
@@ -80,6 +79,16 @@ ui <- dashboardPage(
 ))
 
 server <- function(input, output, session) {
+    
+    # observeEvent(input$treefile, {
+    #     if (is.null(input$treefile)) {
+    #         disable('hmfile')
+    #         disable('barfile')
+    #     } else if (!is.null(input$treefile)) {
+    #         enable('hmfile')
+    #         enable('barfile')
+    #     }
+    # })
     
     plotInput <- reactive({
         draw(g())
@@ -103,15 +112,15 @@ server <- function(input, output, session) {
         }
         print(aList)
     })
-    
-    shinyjs::disable('hmfile')
-    shinyjs::disable('barfile')
-    
-    observeEvent(
-        req (input$treefile),
-        shinyjs::enable('hmfile'),
-        shinyjs::enable('barfile'))
-    
+
+    # disable('hmfile')
+    # disable('barfile')
+    # 
+    # observeEvent(
+    #     req (input$treefile),
+    #     enable('hmfile'),
+    #     enable('barfile'))
+
     output$figure <- renderPlot({
         draw(g())
     }, res = 96)
