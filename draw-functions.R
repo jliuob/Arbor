@@ -68,8 +68,9 @@ draw <- function (data) {
   th = theme(legend.position = "top")
   print(data)
   if (length(data) == 0) {
-    g <- ggplot(data.frame(x = 0, y = 0,
-                           text = "No data yet")) + geom_text(aes(x = x, y = y, label = text))
+    g <- ggplot(data.frame(x = 0, y = 0, 
+                           text = "No data yet")) + 
+      geom_text(aes(x = x, y = y, label = text))
   } else if ((length(data) == 1) & (data[[1]]$type == 'tree')) {
     g <- draw1(data[[1]])
   } else if ((length(data) > 1) & (data[[1]]$type == 'tree')) {
