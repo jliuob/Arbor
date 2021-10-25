@@ -14,7 +14,7 @@ drawtree <- function (tr) {
     size = 2,
     ladderize = TRUE
   ) +
-    geom_tiplab(colour = "navyblue",
+    geom_tiplab(colour = "navyblue", 
                 size = 10,
                 align = TRUE) +
     geom_tippoint(color = "orange", size = 3) +
@@ -48,11 +48,6 @@ draw1 <- function(data) {
   }
 }
 
-treefirst <- function(data) {
-  ggplot(data.frame(x = 0, y = 0,text = "Please upload tree data first")) + 
-    geom_text(aes(x = x, y = y, label = text))
-}
-
 draw <- function (data) {
   save(data, file="data.Rdata")
   for (i in seq_along(data)) {
@@ -64,27 +59,21 @@ draw <- function (data) {
       data[[i]]$order=3
     }
   }
-  
+
   if (length(data)>0){
     ord<-order(unlist(lapply(data, function(x){x$order})))
     data<-data[ord]
   }
-      
+  
   th = theme(legend.position = "top")
   print(data)
   if (length(data) == 0) {
     g <- ggplot(data.frame(x = 0, y = 0,
                            text = "No data yet")) + geom_text(aes(x = x, y = y, label = text))
-  } else if (length(data) == 1) {
-    if (data[[1]]$type=='tree') {
+  } else if ((length(data) == 1) & (data[[1]]$type == 'tree')) {
+    g <- draw1(data[[1]])
+  } else if ((length(data) > 1) & (data[[1]]$type == 'tree')) {
       g <- draw1(data[[1]])
-    } else {
-      g <- treefirst()
-      }
-  } else if (length(data) > 1) {
-    if (data[[1]]$type=='tree'){
-      g <- draw1(data[[1]])
-      
       row.order = get_taxa_order(g) # from top to bottom
       for (i in 2:length(data)) {
         data[[i]]$data$Label = factor(data[[i]]$data$Label, level = rev(row.order))
@@ -93,11 +82,10 @@ draw <- function (data) {
           g2 + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
         g <- g + g2 * th
       }
-    } else {
-      g <- treefirst()
-      }
-    ## TODO: only keep one figure for tree plot
-    # replace by the new tree
+  } else if (data[[1]]$type != 'tree'){
+    g <- ggplot(data.frame(x = 0, y = 0,
+                           text = "Please upload tree data first")) + 
+      geom_text(aes(x = x, y = y, label = text))
   }
   g
 }

@@ -14,25 +14,28 @@ source('draw-functions.R')
 aList = list()
 
 ui <- dashboardPage(
-    
+
     dashboardHeader(title = "Tree Data Visualization"),
-    
+
     dashboardSidebar(
         sidebarMenu(
             menuItem('Introduction', tabName = 'introduction', icon = icon('book-open')),
             menuItem("Data Upload", tabName = "upload", icon = icon("upload")),
-            menuItem("Plots", tabName = "plot", icon = icon("th"))
+            menuItem('Rearrangement', tabName = 'rearrangements', icon = icon('chart-bar')),
+            menuItem("Plots", tabName = "plot", icon = icon("images")),
+            menuItem('Contact', tabName = 'contact', icon = icon('envelope'))
         )
     ),
     
     dashboardBody(
+        useShinyjs(),
         tabItems(
             tabItem(tabName = "introduction",
                     'Tree data visualization is a R shiny app for 
                     viewing tree data and its plots by simply uploading 
                     tree data and csv columns in Data Upload, and then 
                     the plots would be shown in Plots. Only .nwk is accepted 
-                    for tree data upload. Only .csv is accepted for both 
+                    for tree data upload. Only csv is accepted for both 
                     heat map and bar plot data upload. Users are also 
                     welcomed to download the plots if needed.'
                     ),
@@ -40,56 +43,65 @@ ui <- dashboardPage(
             tabItem(tabName = "upload",
                     fluidRow(
                         column(width = 6,
-                        box(title = 'Tree', width = NULL,
+                        box(title = 'Step 1: Tree', width = NULL,
                             status = "primary", solidHeader = TRUE,
-                            fileInput("treefile", 
-                                         "", 
-                                         buttonLabel = "Upload",
-                                         accept = ".nwk")
+                            fileInput("treefile",
+                                      "Tree", 
+                                      buttonLabel = "Upload",
+                                      accept = ".nwk")
                         )),
                     
                         column(width = 6,
-                               # shinyjs::useShinyjs(),
-                        box(title = 'Heatmap', width = NULL,
+                        box(title = 'Step 2: Heatmap', width = NULL,
                             status = "primary", solidHeader = TRUE,
                             collapsible = TRUE,
                             fileInput("hmfile",
-                                            "",
-                                            buttonLabel = "Upload",
-                                            accept = ".csv")
+                                      "Heatmap",
+                                      buttonLabel = "Upload",
+                                      accept = ".csv",
+                                      multiple = TRUE)
                         ),
                         
-                        box(title = 'Bar Plot', width = NULL,
+                        box(title = 'Step 2: Bar Plot', width = NULL,
                             status = "primary", solidHeader = TRUE,
                             collapsible = TRUE,
                             fileInput("barfile",
-                                           "",
-                                           buttonLabel = "Upload",
-                                           accept = ".csv",)
+                                      "Bar Plot",
+                                      buttonLabel = "Upload",
+                                      accept = ".csv",
+                                      multiple = TRUE)
                         )
                     )
             )),
-        
+            
+            # tabItem(tabName = 'rearrangements',
+            #         barfile<-as.data.frame('barfile'),
+            #         datatable(
+            #                 barfile, extensions = 'RowReorder',
+            #                 options = list(rowReorder = TRUE, order = list(c(0 , 'asc')))
+            #         )),
+
             tabItem(tabName = "plot",
                 fluidRow(column(12, plotOutput("figure"))),
                 fluidRow(column(width = 2, offset = 5, 
                                 downloadButton("download", 'Download'))),
-        )
+            ),
+            
+            tabItem(tabName = 'contact',
+                    "Authors: Xiaowei Zhan, Jennifer Liu.\nGithub: https://github.com/jliuob/Tree.git"
+                    )
     )
 ))
 
 server <- function(input, output, session) {
     
-    # observeEvent(input$treefile, {
-    #     if (is.null(input$treefile)) {
-    #         disable('hmfile')
-    #         disable('barfile')
-    #     } else if (!is.null(input$treefile)) {
-    #         enable('hmfile')
-    #         enable('barfile')
-    #     }
-    # })
-    
+    shinyjs::disable('hmfile')
+    shinyjs::disable('barfile')
+    observeEvent(input$treefile, {
+        enable('hmfile')
+        enable('barfile')
+    })
+
     plotInput <- reactive({
         draw(g())
     })
@@ -105,26 +117,20 @@ server <- function(input, output, session) {
         if (!is.null(input$hmfile)) {
             aList[[length(aList) + 1]] = list(type = 'heatmap',
                                               data = read.csv(input$hmfile$datapath))
+            
         }
         if (!is.null(input$barfile)) {
             aList[[length(aList) + 1]] = list(type = 'barplot',
                                               data = read.csv(input$barfile$datapath))
+            # input$barfile=NULL
         }
         print(aList)
     })
 
-    # disable('hmfile')
-    # disable('barfile')
-    # 
-    # observeEvent(
-    #     req (input$treefile),
-    #     enable('hmfile'),
-    #     enable('barfile'))
-
     output$figure <- renderPlot({
         draw(g())
     }, res = 96)
-    
+     
     output$download <- downloadHandler(
         filename = function() {
             paste0(input$treefile, ".png")
