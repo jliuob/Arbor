@@ -82,8 +82,9 @@ ui <- dashboardPage(
 
             tabItem(tabName = "plot",
                 fluidRow(column(12, plotOutput("figure"))),
-                fluidRow(column(width = 2, offset = 5, 
-                                downloadButton("download", 'Download'))),
+                fluidRow(column(4, downloadButton("downloadpng", 'Download-png')),
+                         column(4, downloadButton("downloadjpg", 'Download-jpg')),
+                         column(4, downloadButton("downloadpdf", 'Download-pdf')))
             ),
             
             tabItem(tabName = 'contact',
@@ -130,12 +131,30 @@ server <- function(input, output, session) {
         draw(g())
     }, res = 96)
      
-    output$download <- downloadHandler(
+    output$downloadpng <- downloadHandler(
         filename = function() {
             paste0(input$treefile, ".png")
         },
         content = function(file) {
             ggsave(file, plot = plotInput(), device = "png")
+        }
+    )
+    
+    output$downloadjpg <- downloadHandler(
+        filename = function() {
+            paste0(input$treefile, ".jpg")
+        },
+        content = function(file) {
+            ggsave(file, plot = plotInput(), device = "jpg")
+        }
+    )
+    
+    output$downloadpdf <- downloadHandler(
+        filename = function() {
+            paste0(input$treefile, ".pdf")
+        },
+        content = function(file) {
+            ggsave(file, plot = plotInput(), device = "pdf")
         }
     )
 }
