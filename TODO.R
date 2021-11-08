@@ -8,4 +8,4 @@ TODO
 # 5. Allow user to specify figure dimension. choose size png/pdf 
 
 
-
+# 6. Tree plot overlap 
