@@ -4,47 +4,104 @@ library(ggtree)
 library(ggplot2)
 library(ggimage)
 library(aplot)
+library(bslib)
+library(shinydashboard)
+library(shinyjs)
 #devtools::install_github("YuLab-SMU/ggtree")
 source('draw-functions.R')
 
 aList = list()
 
-ui <- fluidPage(
-    # Application title
-    titlePanel("Tree Data Visualization"),
-    
-    fluidRow(
-        column(
-            4,
-            fileInput("treefile", "Tree", buttonLabel = "Upload",
-                      accept = ".nwk")
-        ),
-        # multiple=T: upload multiple files
-        column(
-            4,
-            fileInput(
-                "hmfile",
-                "Heatmap",
-                buttonLabel = "Upload",
-                accept = ".csv"
-            )
-        ),
-        column(
-            4,
-            fileInput(
-                "barfile",
-                "Bar Plot",
-                buttonLabel = "Upload",
-                accept = ".csv"
-            )
+ui <- dashboardPage(
+
+    dashboardHeader(title = "Tree Data Visualization"),
+
+    dashboardSidebar(
+        sidebarMenu(
+            menuItem('Introduction', tabName = 'introduction', icon = icon('book-open')),
+            menuItem("Data Upload", tabName = "upload", icon = icon("upload")),
+            menuItem('Rearrangement', tabName = 'rearrangements', icon = icon('chart-bar')),
+            menuItem("Plots", tabName = "plot", icon = icon("images")),
+            menuItem('Contact', tabName = 'contact', icon = icon('envelope'))
         )
     ),
-    fluidRow(column(12, plotOutput("figure"))),
-    # TODO download
-    downloadButton("download", 'Download')
-)
+    
+    dashboardBody(
+        useShinyjs(),
+        tabItems(
+            tabItem(tabName = "introduction",
+                    'Tree data visualization is a R shiny app for 
+                    viewing tree data and its plots by simply uploading 
+                    tree data and csv columns in Data Upload, and then 
+                    the plots would be shown in Plots. Only .nwk is accepted 
+                    for tree data upload. Only csv is accepted for both 
+                    heat map and bar plot data upload. Users are also 
+                    welcomed to download the plots if needed.'
+                    ),
+            
+            tabItem(tabName = "upload",
+                    fluidRow(
+                        column(width = 6,
+                        box(title = 'Step 1: Tree', width = NULL,
+                            status = "primary", solidHeader = TRUE,
+                            fileInput("treefile",
+                                      "Tree", 
+                                      buttonLabel = "Upload",
+                                      accept = ".nwk")
+                        )),
+                    
+                        column(width = 6,
+                        box(title = 'Step 2: Heatmap', width = NULL,
+                            status = "primary", solidHeader = TRUE,
+                            collapsible = TRUE,
+                            fileInput("hmfile",
+                                      "Heatmap",
+                                      buttonLabel = "Upload",
+                                      accept = ".csv",
+                                      multiple = TRUE)
+                        ),
+                        
+                        box(title = 'Step 2: Bar Plot', width = NULL,
+                            status = "primary", solidHeader = TRUE,
+                            collapsible = TRUE,
+                            fileInput("barfile",
+                                      "Bar Plot",
+                                      buttonLabel = "Upload",
+                                      accept = ".csv",
+                                      multiple = TRUE)
+                        )
+                    )
+            )),
+            
+            # tabItem(tabName = 'rearrangements',
+            #         barfile<-as.data.frame('barfile'),
+            #         datatable(
+            #                 barfile, extensions = 'RowReorder',
+            #                 options = list(rowReorder = TRUE, order = list(c(0 , 'asc')))
+            #         )),
+
+            tabItem(tabName = "plot",
+                fluidRow(column(12, plotOutput("figure"))),
+                fluidRow(column(4, downloadButton("downloadpng", 'Download-png')),
+                         column(4, downloadButton("downloadjpg", 'Download-jpg')),
+                         column(4, downloadButton("downloadpdf", 'Download-pdf')))
+            ),
+            
+            tabItem(tabName = 'contact',
+                    "Authors: Xiaowei Zhan, Jennifer Liu.\nGithub: https://github.com/jliuob/Tree.git"
+                    )
+    )
+))
 
 server <- function(input, output, session) {
+    
+    shinyjs::disable('hmfile')
+    shinyjs::disable('barfile')
+    observeEvent(input$treefile, {
+        enable('hmfile')
+        enable('barfile')
+    })
+
     plotInput <- reactive({
         draw(g())
     })
@@ -60,24 +117,44 @@ server <- function(input, output, session) {
         if (!is.null(input$hmfile)) {
             aList[[length(aList) + 1]] = list(type = 'heatmap',
                                               data = read.csv(input$hmfile$datapath))
+            
         }
         if (!is.null(input$barfile)) {
             aList[[length(aList) + 1]] = list(type = 'barplot',
                                               data = read.csv(input$barfile$datapath))
+            # input$barfile=NULL
         }
         print(aList)
     })
-    
+
     output$figure <- renderPlot({
         draw(g())
     }, res = 96)
-    
-    output$download <- downloadHandler(
+     
+    output$downloadpng <- downloadHandler(
         filename = function() {
             paste0(input$treefile, ".png")
         },
         content = function(file) {
             ggsave(file, plot = plotInput(), device = "png")
+        }
+    )
+    
+    output$downloadjpg <- downloadHandler(
+        filename = function() {
+            paste0(input$treefile, ".jpg")
+        },
+        content = function(file) {
+            ggsave(file, plot = plotInput(), device = "jpg")
+        }
+    )
+    
+    output$downloadpdf <- downloadHandler(
+        filename = function() {
+            paste0(input$treefile, ".pdf")
+        },
+        content = function(file) {
+            ggsave(file, plot = plotInput(), device = "pdf")
         }
     )
 }
