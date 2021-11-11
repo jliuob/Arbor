@@ -4,7 +4,7 @@ library(ggtree)
 library(ggplot2)
 library(ggimage)
 library(aplot)
-devtools::install_github("YuLab-SMU/ggtree")
+#devtools::install_github("YuLab-SMU/ggtree")
 source('draw-functions.R')
 
 aList = list()
