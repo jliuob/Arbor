@@ -10,10 +10,19 @@ library(shinyjs)
 #devtools::install_github("YuLab-SMU/ggtree")
 source('draw-functions.R')
 
-aList = list()
+debug <- FALSE
+if (debug) {
+  library(reactlog)
+  reactlog_enable()
+  # once app has closed, display reactlog from shiny
+  shiny::reactlogShow()
+} 
+if (FALSE) {
+  library(reactlog)
+  reactlog_disable()
+}
 
 ui <- dashboardPage(
-
     dashboardHeader(title = "Tree Data Visualization"),
 
     dashboardSidebar(
@@ -70,15 +79,23 @@ ui <- dashboardPage(
                                       accept = ".csv",
                                       multiple = TRUE)
                         )
+                    )),
+                    fluidRow(
+                        box(title = "Upload Status", width = NULL, 
+                            status = "primary", solidHeader = TRUE,
+                            collapsible = TRUE,
+                            verbatimTextOutput("uploadStatusText")
+                        )
                     )
-            )),
+            ),
             
-            # tabItem(tabName = 'rearrangements',
-            #         barfile<-as.data.frame('barfile'),
-            #         datatable(
-            #                 barfile, extensions = 'RowReorder',
-            #                 options = list(rowReorder = TRUE, order = list(c(0 , 'asc')))
-            #         )),
+            tabItem(tabName = 'rearrangements',
+                    fluidRow(column(12,
+                    # datatable(
+                    #         barfile, extensions = 'RowReorder',
+                    #         options = list(rowReorder = TRUE, order = list(c(0 , 'asc')))
+                    # )
+                    ))),
 
             tabItem(tabName = "plot",
                 fluidRow(column(12, plotOutput("figure"))),
@@ -94,41 +111,60 @@ ui <- dashboardPage(
 ))
 
 server <- function(input, output, session) {
-    
-    shinyjs::disable('hmfile')
-    shinyjs::disable('barfile')
+  ## this stores all data
+  v <- reactiveValues(l = list())
+  
+  # ## UI customization
+  #   shinyjs::disable('hmfile')
+  #   shinyjs::disable('barfile')
+  #   observeEvent(input$treefile, {
+  #       enable('hmfile')
+  #       enable('barfile')
+  #   })
+
+
+# Data upload panel --------------------------------------------------------------
+    output$uploadStatusText <- renderText({
+      l <- v$l
+      nTree <- length(Filter(function(x){x$type == "tree"}, l))
+      nHeatmap <- length(Filter(function(x){x$type == "heatmap"}, l))
+      nBar <- length(Filter(function(x){x$type == "barplot"}, l))
+      
+      sprintf("Uploaded %d tree plot(s), %d heatmap(s), and %d bar plot(s)",
+              nTree, nHeatmap, nBar)
+    })
     observeEvent(input$treefile, {
-        enable('hmfile')
-        enable('barfile')
+      print("obs event: tree")
+      if (!is.null(input$treefile)) {
+        v$l[[length(v$l) + 1]] <- list(type = 'tree',
+                                            data = read.tree(input$treefile$datapath))
+        reset("treefile")
+        cat("input updated by adding a tree", length(v$l), "done\n")
+      }
     })
+    observeEvent(input$hmfile, {
+      print("obs event: heatmap")
+      if (!is.null(input$hmfile)) {
+        v$l[[length(v$l) + 1]] <-  list(type = 'heatmap',
+                                        data = read.csv(input$hmfile$datapath))
+        reset("heatmap")
+      }
+    })
+    observeEvent(input$barfile, {
+      print("obs event: barplot")
+      if (!is.null(input$barfile)) {
+        v$l[[length(v$l) + 1]] <- list(type = 'barplot',
+                                       data = read.csv(input$barfile$datapath))
+        reset("barplot")
+      }
+    })    
 
+# Show figure -------------------------------------------------------------
     plotInput <- reactive({
-        draw(g())
-    })
-    
-    g <- reactive({
-        # list
-        cat("g is called,", length(aList), '\n')
-        print(aList)
-        if (!is.null(input$treefile)) {
-            aList[[length(aList) + 1]] = list(type = 'tree',
-                                              data = read.tree(input$treefile$datapath))
-        }
-        if (!is.null(input$hmfile)) {
-            aList[[length(aList) + 1]] = list(type = 'heatmap',
-                                              data = read.csv(input$hmfile$datapath))
-            
-        }
-        if (!is.null(input$barfile)) {
-            aList[[length(aList) + 1]] = list(type = 'barplot',
-                                              data = read.csv(input$barfile$datapath))
-            # input$barfile=NULL
-        }
-        print(aList)
-    })
-
+      draw(v$l)
+    })  
     output$figure <- renderPlot({
-        draw(g())
+        draw(v$l)
     }, res = 96)
      
     output$downloadpng <- downloadHandler(
@@ -160,3 +196,4 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
