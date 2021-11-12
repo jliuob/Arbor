@@ -6,7 +6,9 @@ library(ggimage)
 library(aplot)
 library(bslib)
 library(shinydashboard)
+library(shinydashboardPlus)
 library(shinyjs)
+
 #devtools::install_github("YuLab-SMU/ggtree")
 source('draw-functions.R')
 
@@ -32,11 +34,18 @@ ui <- dashboardPage(
             menuItem('Rearrangement', tabName = 'rearrangements', icon = icon('chart-bar')),
             menuItem("Plots", tabName = "plot", icon = icon("images")),
             menuItem('Contact', tabName = 'contact', icon = icon('envelope'))
-        )
+        ),
+        collapsed = FALSE
     ),
     
     dashboardBody(
         useShinyjs(),
+        tags$head(
+          tags$style(HTML("
+                      .shiny-html-output { overflow-x: scroll; }
+                      " )
+          )
+        ),
         tabItems(
             tabItem(tabName = "introduction",
                     'Tree data visualization is a R shiny app for 
@@ -98,10 +107,25 @@ ui <- dashboardPage(
                     ))),
 
             tabItem(tabName = "plot",
-                fluidRow(column(12, plotOutput("figure"))),
-                fluidRow(column(4, downloadButton("downloadpng", 'Download-png')),
-                         column(4, downloadButton("downloadjpg", 'Download-jpg')),
-                         column(4, downloadButton("downloadpdf", 'Download-pdf')))
+                    fluidRow(column(12, uiOutput("figure"))),
+                    hr(),
+                fluidRow(
+                  column(12,
+                  box(id = "download.buttons",
+                      title = "Download",
+                    downloadButton("downloadpng", 'Download-png'),
+                    br(),
+                    downloadButton("downloadjpg", 'Download-jpg'),
+                    br(),
+                    downloadButton("downloadpdf", 'Download-pdf')))),
+              
+                fluidRow(column(12,
+                                box(id = "plot.advanced.option",
+                                    title = "Advanced options",
+                                    collapsible = TRUE,
+                                    collapsed = TRUE,
+                             numericInput("plot.width", "Plot width on screen", 500, min = 500)))),
+                
             ),
             
             tabItem(tabName = 'contact',
@@ -160,19 +184,37 @@ server <- function(input, output, session) {
     })    
 
 # Show figure -------------------------------------------------------------
+    plotWidth <- reactive({
+      if (is.null(input$plot.width)) {
+        500 * max(1, length(v$l))
+      } else {
+        input$plot.width
+      }
+    })
     plotInput <- reactive({
       draw(v$l)
     })  
-    output$figure <- renderPlot({
+    output$figure <- renderUI({
+      plotOutput("ggplot", width = plotWidth())
+    })
+    
+    output$ggplot <- renderPlot({
         draw(v$l)
     }, res = 96)
      
+    get.raster.size <- reactive({
+      size = 8
+      w.h.ratio = max(1, length(v$l))
+      list(height = size / w.h.ratio, width = size)
+    })
     output$downloadpng <- downloadHandler(
         filename = function() {
             paste0(input$treefile, ".png")
         },
         content = function(file) {
-            ggsave(file, plot = plotInput(), device = "png")
+            ggsave(file, plot = plotInput(), device = "png",
+                   width = get.raster.size()$width, 
+                   height = get.raster.size()$height)
         }
     )
     
@@ -181,16 +223,24 @@ server <- function(input, output, session) {
             paste0(input$treefile, ".jpg")
         },
         content = function(file) {
-            ggsave(file, plot = plotInput(), device = "jpg")
+            ggsave(file, plot = plotInput(), device = "jpg",
+                   width = get.raster.size()$width, 
+                   height = get.raster.size()$height)
         }
     )
-    
+    get.pdf.size <- reactive({
+      size = 8
+      w.h.ratio = max(1, length(v$l))
+      list(height = size / w.h.ratio, width = size)
+    })
     output$downloadpdf <- downloadHandler(
         filename = function() {
             paste0(input$treefile, ".pdf")
         },
         content = function(file) {
-            ggsave(file, plot = plotInput(), device = "pdf")
+            ggsave(file, plot = plotInput(), device = "pdf", 
+                   width = get.pdf.size()$width, 
+                   height = get.pdf.size()$height)
         }
     )
 }
