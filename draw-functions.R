@@ -15,11 +15,11 @@ drawtree <- function (tr) {
     ladderize = TRUE
   ) +
     geom_tiplab(colour = "navyblue", 
-                size = 10,
+                size = 7, offset=1,
                 align = TRUE) +
     geom_tippoint(color = "orange", size = 3) +
     geom_rootedge(color = "navyblue", size = 2) +
-    theme_tree2() + xlim(0, 6)
+    theme_tree2() + xlim(0, max(tr$edge.length) + 2)
 }
 
 drawhm <- function (hm) {
@@ -78,15 +78,15 @@ draw <- function (data) {
   } else if ((length(data) == 1) & (data[[1]]$type == 'tree')) {
     g <- draw1(data[[1]])
   } else if ((length(data) > 1) & (data[[1]]$type == 'tree')) {
-      g <- draw1(data[[1]])
-      row.order = get_taxa_order(g) # from top to bottom
-      for (i in 2:length(data)) {
-        data[[i]]$data$Label = factor(data[[i]]$data$Label, level = rev(row.order))
-        g2 <- draw1(data[[i]])
-        g2 <-
-          g2 + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
-        g <- g + g2 * th
-      }
+    g <- draw1(data[[1]])
+    row.order = get_taxa_order(g) # from top to bottom
+    for (i in 2:length(data)) {
+      data[[i]]$data$Label = factor(data[[i]]$data$Label, level = rev(row.order))
+      g2 <- draw1(data[[i]])
+      g2 <-
+        g2 + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
+      g <- g + g2 * th
+    }
   } else if (data[[1]]$type != 'tree'){
     g <- ggplot(data.frame(x = 0, y = 0,
                            text = "Please upload tree data first")) + 
