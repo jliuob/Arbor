@@ -94,7 +94,7 @@ draw <- function (data) {
   }
   g
 }
-
+ 
 if (T) {
   testDraw <- function() {
     # setwd("~/Downloads/Jennifer/")
