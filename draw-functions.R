@@ -15,15 +15,15 @@ drawtree <- function (tr) {
     ladderize = TRUE
   ) +
     geom_tiplab(colour = "navyblue", 
-                size = 10,
+                size = 7, offset=1,
                 align = TRUE) +
     geom_tippoint(color = "orange", size = 3) +
     geom_rootedge(color = "navyblue", size = 2) +
-    theme_tree2() 
+    theme_tree2() + xlim(0, max(tr$edge.length) + 2)
 }
 
 drawhm <- function (hm) {
-  print(hm)
+  # print(hm)
   ggplot(hm, aes(x = Category, y = Label)) +
     geom_tile(aes(fill = Value)) + scale_fill_viridis_c()
 } 
@@ -48,7 +48,7 @@ draw1 <- function(data) {
   }
 }
 
-draw <- function (data) {
+assignOrder <- function(data) {
   save(data, file="data.Rdata")
   for (i in seq_along(data)) {
     if (data[[i]]$type=='tree') {
@@ -59,30 +59,34 @@ draw <- function (data) {
       data[[i]]$order=3
     }
   }
-
+  return(data)
+}
+draw <- function (data) {
+  data <- assignOrder(data)
+  
   if (length(data)>0){
     ord<-order(unlist(lapply(data, function(x){x$order})))
     data<-data[ord]
   }
   
   th = theme(legend.position = "top")
-  print(data)
+  # print(data)
   if (length(data) == 0) {
     g <- ggplot(data.frame(x = 0, y = 0, 
-                           text = "No data yet")) + 
+                           text = "No data yet, please click \"Data Upload\"")) + 
       geom_text(aes(x = x, y = y, label = text))
   } else if ((length(data) == 1) & (data[[1]]$type == 'tree')) {
     g <- draw1(data[[1]])
   } else if ((length(data) > 1) & (data[[1]]$type == 'tree')) {
-      g <- draw1(data[[1]])
-      row.order = get_taxa_order(g) # from top to bottom
-      for (i in 2:length(data)) {
-        data[[i]]$data$Label = factor(data[[i]]$data$Label, level = rev(row.order))
-        g2 <- draw1(data[[i]])
-        g2 <-
-          g2 + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
-        g <- g + g2 * th
-      }
+    g <- draw1(data[[1]])
+    row.order = get_taxa_order(g) # from top to bottom
+    for (i in 2:length(data)) {
+      data[[i]]$data$Label = factor(data[[i]]$data$Label, level = rev(row.order))
+      g2 <- draw1(data[[i]])
+      g2 <-
+        g2 + theme(axis.title.y = element_blank(), axis.text.y = element_blank())
+      g <- g + g2 * th
+    }
   } else if (data[[1]]$type != 'tree'){
     g <- ggplot(data.frame(x = 0, y = 0,
                            text = "Please upload tree data first")) + 
