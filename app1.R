@@ -131,7 +131,7 @@ ui <- dashboardPage(
                                         collapsible = TRUE,
                                         collapsed = TRUE,
                                         numericInput("plot.width", "Plot width on screen", 500, min = 500)))),
- 
+
             ),
             
             tabItem(tabName = 'contact',
