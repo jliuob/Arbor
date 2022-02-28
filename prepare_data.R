@@ -8,7 +8,6 @@ library(kableExtra)
 library(aplot)
 source('draw-functions.R')
 
-
 prepare_data <- function(psObject, csvFile, outputPrefix) {
   
   tree <- phy_tree(psObject)
