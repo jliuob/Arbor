@@ -14,19 +14,16 @@ drawtree <- function (tr) {
     size = 1,
     ladderize = TRUE
   ) +
-<<<<<<< HEAD
     # geom_tiplab(colour = "navyblue",
     #             size = 2, offset=0.2,
     #             align = F) +
     geom_tippoint(color = "orange", size = 1) +
     geom_rootedge(color = "navyblue", size = 1) +
-=======
     geom_tiplab(colour = "navyblue", 
                 size = 7, offset=1,
                 align = TRUE) +
     geom_tippoint(color = "orange", size = 3) +
     geom_rootedge(color = "navyblue", size = 2) +
->>>>>>> 1d9ce7c392b82e2d725165352ddf4f2a89fcbb41
     theme_tree2() + xlim(0, max(tr$edge.length) + 2)
 }
 
@@ -71,15 +68,10 @@ assignOrder <- function(data) {
   }
   return(data)
 }
-<<<<<<< HEAD
+
 
 draw <- function (data) {
   data <- assignOrder(data)
-  # save(data,file="data.Rdata")
-=======
-draw <- function (data) {
-  data <- assignOrder(data)
->>>>>>> 1d9ce7c392b82e2d725165352ddf4f2a89fcbb41
   
   if (length(data)>0){
     ord<-order(unlist(lapply(data, function(x){x$order})))
@@ -123,6 +115,5 @@ if (T) {
     draw(d[1:3])
   }
   testDraw()
-  
-  
+
 }
