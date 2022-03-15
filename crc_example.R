@@ -6,6 +6,3 @@ bacteria <- read.csv("~/Documents/Tree/crc/eocrc.vs.ctrl.male.csv")
 crc<-paste("crc")
 
 prepare_data(ps, bacteria, crc)
-
-# label
-# upload github

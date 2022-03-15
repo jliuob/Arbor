@@ -19,11 +19,6 @@ drawtree <- function (tr) {
     #             align = F) +
     geom_tippoint(color = "orange", size = 1) +
     geom_rootedge(color = "navyblue", size = 1) +
-    geom_tiplab(colour = "navyblue", 
-                size = 7, offset=1,
-                align = TRUE) +
-    geom_tippoint(color = "orange", size = 3) +
-    geom_rootedge(color = "navyblue", size = 2) +
     theme_tree2() + xlim(0, max(tr$edge.length) + 2)
 }
 
@@ -33,7 +28,6 @@ drawhm <- function (hm) {
     geom_tile(aes(fill = Value)) + scale_fill_viridis_c()
 } 
 
-# Label&Value
 drawbar <- function (bar) {
   ggplot(bar, aes(Label, Value)) +
     geom_col(aes(fill = Group)) +

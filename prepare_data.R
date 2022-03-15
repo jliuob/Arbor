@@ -47,8 +47,22 @@ prepare_data <- function(psObject, csvFile, outputPrefix) {
   bar_prepared$Value<-bar_prepared$ef_lda
   bar_prepared$Group<-bar_prepared$enrich_group
   
-  write.csv(bar_prepared, file = paste(outputPrefix, ".csv"), row.names= TRUE)
+  # prepare heatmap.csv
+  OTU<-otu_table(psObject, taxa_are_rows = F)
+  table_tree <- tax_table(psObject)
+  sample<-sample_data(psObject)
+  index_heatmap<-match(bar_prepared$Label, taxa_names(OTU))
+  OTU_cut<-OTU[,index_heatmap]
+  OTU_prepared<-phyloseq(OTU_cut, table_tree, sample, tree_prepared)
+  heatmap_prepared<-psmelt(OTU_prepared)
+  heatmap_prepared$Category<-heatmap_prepared$Sample
+  heatmap_prepared$Label<-heatmap_prepared$OTU
+  heatmap_prepared$Value<-heatmap_prepared$Abundance
+  
+  # save files
+  write.csv(bar_prepared, file = paste(outputPrefix, ".bar.csv"), row.names= TRUE)
   write.tree(tree_prepared, file = paste(outputPrefix, ".nwk"))
+  write.csv(heatmap_prepared, file = paste(outputPrefix, ".heatmap.csv"))
 }
 
 
