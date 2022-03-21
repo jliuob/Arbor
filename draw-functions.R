@@ -14,9 +14,9 @@ drawtree <- function (tr) {
     size = 1,
     ladderize = TRUE
   ) +
-    # geom_tiplab(colour = "navyblue",
-    #             size = 2, offset=0.2,
-    #             align = F) +
+    geom_tiplab(colour = "navyblue",
+                size = 2, offset=0.2,
+                align = T) +
     geom_tippoint(color = "orange", size = 1) +
     geom_rootedge(color = "navyblue", size = 1) +
     theme_tree2() + xlim(0, max(tr$edge.length) + 2)
@@ -25,7 +25,8 @@ drawtree <- function (tr) {
 drawhm <- function (hm) {
   # print(hm)
   ggplot(hm, aes(x = Category, y = Label)) +
-    geom_tile(aes(fill = Value)) + scale_fill_viridis_c()
+    geom_tile(aes(fill = Value)) + scale_fill_viridis_c() +
+    theme(axis.ticks.y = element_blank(), axis.text.y = element_blank())
 } 
 
 drawbar <- function (bar) {
