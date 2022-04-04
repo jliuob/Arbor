@@ -12,7 +12,7 @@ Once the data are successfully uploaded, check Upload Status to see the total nu
 
 Please check Plots for the result.
 
-![images](images/tree.nwk.jpg)
+![](images/tree.nwk.jpg)
 
 ## Example 2
 
@@ -30,8 +30,8 @@ prepare_data(ps, bacteria, crc)
 
 Then, upload the output files onto arbor.R in the same way as in example 1:
 
-![images](images/Screen%20Shot%202022-04-04%20at%2002.34.40-01.png)
+![](images/Screen%20Shot%202022-04-04%20at%2002.34.40-01.png)
 
 Check Plots for the results:
 
-![images](images/crc%20.nwk-02.jpg)
+![](images/crc%20.nwk-02.jpg)
