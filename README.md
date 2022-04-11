@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Arbor is a RShiny app to directly visualize tree data and its associated heat maps and bar plots. In order to visualize tree data in multiple aspects, users may upload tree data in .nwk, and heat map or bar plot data in .csv, and download the plots in either .png, .jpg, or .pdf. Hope you would find this app helpful!
+Arbor.R is a R Shiny app to directly visualize tree data and its associated heat maps and bar plots. In order to visualize tree data in multiple aspects, users may upload tree data in .nwk, and heat map or bar plot data in .csv, and download the plots in either .png, .jpg, or .pdf. Hope you would find this app helpful!
 
 ## Example 1
 
