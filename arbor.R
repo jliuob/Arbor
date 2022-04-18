@@ -9,6 +9,9 @@ library(shinydashboard)
 library(shinydashboardPlus)
 library(shinyjs)
 library(purrr)
+library(BiocManager)
+options(repos = BiocManager::repositories())
+
 #devtools::install_github("YuLab-SMU/ggtree")
 source('draw-functions.R') 
 
