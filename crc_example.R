@@ -1,7 +1,7 @@
 source('prepare_data.R')
 
-# ps<-load("ps.Rdata")
-bacteria <- read.csv("~/Documents/Tree/crc/eocrc.vs.ctrl.male.csv")
+ps<-load("ps.Rdata")
+bacteria <- read.csv("crc/eocrc.vs.ctrl.male.csv")
 crc<-paste("crc")
 
 prepare_data(ps, bacteria, crc)
