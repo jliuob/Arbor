@@ -392,7 +392,7 @@ server <- function(input, output, session) {
     # Show figure -------------------------------------------------------------
     plotWidth <- reactive({
         if (is.null(input$plot.width)) {
-            500 * max(1, length(v$l))
+            800 * max(1, length(v$l))
         } else {
             input$plot.width
         }
@@ -409,7 +409,7 @@ server <- function(input, output, session) {
     }, res = 96)
     
     get.raster.size <- reactive({
-        size = 10
+        size = 20
         w.h.ratio = max(1, length(v$l))
         list(height = size / w.h.ratio, width = size)
     })
@@ -435,7 +435,7 @@ server <- function(input, output, session) {
         }
     )
     get.pdf.size <- reactive({
-        size = 10
+        size = 20
         w.h.ratio = max(1, length(v$l))
         list(height = size / w.h.ratio, width = size)
     })

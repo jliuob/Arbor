@@ -24,13 +24,18 @@ drawtree <- function (tr) {
 
 drawhm <- function (hm) {
   # print(hm)
-  ggplot(hm, aes(x = Category, y = Label)) +
+  ggplot(hm, aes(x = Patient, y = Label)) +
     geom_tile(aes(fill = Value)) + scale_fill_viridis_c() +
-    theme(axis.ticks.y = element_blank(), axis.text.y = element_blank())
+    theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(),
+          axis.text.x = element_text(
+            angle = 90,
+            hjust = 1,
+            vjust = 0.5
+          ))
 } 
 
 drawbar <- function (bar) {
-  ggplot(bar, aes(Label, Value)) +
+  ggplot(bar, aes(Label, Pvalue)) +
     geom_col(aes(fill = Group)) +
     # geom_text(aes(label = Label, y = Value)) +
     coord_flip() +
