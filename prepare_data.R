@@ -46,7 +46,9 @@ prepare_data <- function(psObject, csvFile, outputPrefix) {
   
   index_bar<-match(bar_prepared$base, taxa_names(tree_prepared))
   bar_prepared<-bar_prepared[index_bar,]
-  bar_prepared$Value<-bar_prepared$ef_lda
+  bar_prepared$pvalue<--log10(bar_prepared$pvalue)
+  bar_prepared$Value<-bar_prepared$pvalue
+  bar_prepared$Pvalue<-bar_prepared$Value
   bar_prepared$Group<-bar_prepared$enrich_group
   bar_prepared$Label<-sub(pattern = "^.*\\|", replacement = "", bar_prepared$name)
   
@@ -70,6 +72,7 @@ prepare_data <- function(psObject, csvFile, outputPrefix) {
   phyloseq_prepared<-phyloseq(OTU_cut, table_tree_cut, sample, tree_prepared)
   heatmap_prepared<-psmelt(phyloseq_prepared)
   heatmap_prepared$Category<-heatmap_prepared$Sample
+  heatmap_prepared$Patient<-heatmap_prepared$Category
   heatmap_prepared$Label<-heatmap_prepared$OTU
   heatmap_prepared$Value<-heatmap_prepared$Abundance
   
