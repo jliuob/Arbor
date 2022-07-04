@@ -40,7 +40,15 @@ drawbar <- function (bar) {
     # geom_text(aes(label = Label, y = Value)) +
     coord_flip() +
     scale_fill_viridis_d(option="D", name="discrete\nvalue")+
-    theme(axis.ticks.y = element_blank(), axis.text.y = element_blank())
+    theme(axis.ticks.y = element_blank(), axis.text.y = element_blank()) +
+    theme(
+      panel.background = element_rect(fill='transparent'),
+      plot.background = element_rect(fill='transparent', color=NA),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      legend.background = element_rect(fill='transparent'),
+      legend.box.background = element_rect(fill='transparent')
+    )
 }
 
 ## TODO: need to deal with names with flexibility

@@ -283,7 +283,7 @@ ui <- dashboardPage(
                     
                     fluidRow(column(12,
                                     box(id = "plot.advanced.option",
-                                        title = "Advanced options",
+                                        title = "Advanced Options",
                                         status = "primary",
                                         solidHeader = TRUE,
                                         collapsible = TRUE,
