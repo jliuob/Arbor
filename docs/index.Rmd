@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Downloads
 * [Github](https://github.com/jliuob/Arbor){target="_blank"}  
 * [R Shiny App](https://jennifer-liu-tree.shinyapps.io/tree/){target="_blank"}   
-* [Example 1 script](https://raw.githubusercontent.com/jliuob/Tree/main/crc_example.R "download")    
+* [Example 1 script](https://raw.githubusercontent.com/jliuob/Arbor/main/docs/Example 1 "download") 
      A simple example. The data was designed from Case Study 1. 
 * [Example 2 script](https://github.com/jliuob/Tree/crc_example.R "download")    
      The example data was designed from Case Study 2.
