@@ -117,7 +117,7 @@ if (T) {
     # setwd("~/Downloads/Jennifer/")
     d = list(
       list(type = 'tree', data = read.tree("tree.nwk")),
-      list(type = 'heatmap', data = read.csv("example.csv")),
+      list(type = 'heatmap', data = read.csv("heatmap.csv")),
       list(type = 'barplot', data = read.csv('bar.csv'))
     )
     draw(d[1:3])
