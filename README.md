@@ -39,4 +39,4 @@ Then, upload the output files onto arbor.R in the same way as in example 1:
 
 Check Plots for the results:
 
-![](crc .nwk.png)
+![](crc.nwk.png)
