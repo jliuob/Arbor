@@ -1,0 +1,65 @@
+---
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Arbor 
+  Interactive Hierarchical Tree Data Visualization Tool
+
+## Features
+* Arbor annotates the hierarchical tree stems with other plots types to provide related genetic, genomic, or clinical information.    
+* An interactive hierarchical tree data visualization tool.    
+
+## Downloads
+* [Github](https://github.com/jliuob/Arbor){target="_blank"}  
+* [R Shiny App](https://jennifer-liu-tree.shinyapps.io/tree/){target="_blank"}   
+* [Example 1 script](https://raw.githubusercontent.com/jliuob/Tree/main/crc_example.R "download")    
+     A simple example. The data was designed from Case Study 1. 
+* [Example 2 script](https://github.com/jliuob/Tree/crc_example.R "download")    
+     The example data was designed from Case Study 2.
+  
+  压缩包下载
+  /docs
+  
+## Requirements
+
+* [R](https://www.r-project.org/)-Statistical computing
+* [R Shiny](https://shiny.rstudio.com/)-R package
+
+## Arbor Workflows
+![](/Users/jenniferliu/Documents/Tree/workflow.png)
+
+## Case Study 1
+![Figure 1](/Users/jenniferliu/Documents/Tree/tree.nwk.jpg)
+- A simple example. [Example 1 script](https://github.com/jliuob/Tree/crc_example.R "download")    
+- The hierarchical tree stems correspond to the y-axis of the heatmap and the bar plot.  
+
+## Case Study 2
+![Figure 2](/Users/jenniferliu/Documents/Tree/crc .nwk.png)
+- The original data was processed by [prepare_data.R](https://github.com/jliuob/Tree/prepare_data.R "download") to be ready used in Arbor.  
+- [Example 2 script](https://github.com/jliuob/Tree/crc_example.R "download")
+
+
+## References
+
+
+## Citation
+Liu J, Zhan X.  
+"Arbor: an Interactive Visualization Tool for High Dimensional Hierarchical Data"
+
+
+## Contacts
+Xiaowei Zhan (Xiaowei.Zhan@UTSouthwestern.edu)   
+Jennifer Liu (Jennifer.L.Liu.GR@Dartmouth.edu)
+
+
+<p>Copyright &copy; 2022. All rights reserved.</p>
