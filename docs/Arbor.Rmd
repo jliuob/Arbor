@@ -27,9 +27,6 @@ knitr::opts_chunk$set(echo = TRUE)
 * [Example 2 script](https://github.com/jliuob/Tree/crc_example.R "download")    
      The example data was designed from Case Study 2.
   
-  压缩包下载
-  /docs
-  
 ## Requirements
 
 * [R](https://www.r-project.org/)-Statistical computing
