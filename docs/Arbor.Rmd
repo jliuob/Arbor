@@ -17,15 +17,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Features
 * Arbor annotates the hierarchical tree stems with other plots types to provide related genetic, genomic, or clinical information.    
-* An interactive hierarchical tree data visualization tool.    
+* An interactive hierarchical tree data visualization tool. 
 
 ## Downloads
 * [Github](https://github.com/jliuob/Arbor){target="_blank"}  
 * [R Shiny App](https://jennifer-liu-tree.shinyapps.io/tree/){target="_blank"}   
-* [Example 1 script](https://raw.githubusercontent.com/jliuob/Arbor/main/example-1.zip "download")       A simple example.    
-     The data was designed from Case Study 1. 
+* [Example 1 script](https://raw.githubusercontent.com/jliuob/Arbor/main/example-1.zip "download")    
+    A simple example for demonstration purposes.     
+    The data was designed from Case Study 1. 
 * [Example 2 script](https://raw.githubusercontent.com/jliuob/Arbor/main/example-2.zip "download")  
-     The example data was designed from Case Study 2.
+    The data was designed from Case Study 2.
   
 ## Requirements
 
@@ -37,13 +38,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Case Study 1
 ![Figure 1](/Users/jenniferliu/Documents/Tree/tree.nwk.jpg)
-- A simple example. [Example 1 script](https://github.com/jliuob/Tree/crc_example.R "download")    
+- A simple example for demonstration purposes. [Example 1 script](https://raw.githubusercontent.com/jliuob/Arbor/main/example-1.zip "download")    
 - The hierarchical tree stems correspond to the y-axis of the heatmap and the bar plot.  
 
 ## Case Study 2
-![Figure 2](/Users/jenniferliu/Documents/Tree/crc .nwk.png)
-- The original data was processed by [prepare_data.R](https://github.com/jliuob/Tree/prepare_data.R "download") to be ready used in Arbor.  
-- [Example 2 script](https://github.com/jliuob/Tree/crc_example.R "download")
+![Figure 2](/Users/jenniferliu/Documents/Tree/crc.nwk.png)
+- The raw data was processed by [prepare_data.R](https://raw.githubusercontent.com/jliuob/Arbor/main/Example 2/prepare_data.R "download") to be ready used in Arbor.  
+- [Example 2 script](https://raw.githubusercontent.com/jliuob/Arbor/main/example-2.zip "download")
 
 
 ## References
