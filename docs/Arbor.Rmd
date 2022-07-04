@@ -43,7 +43,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Case Study 2
 ![Figure 2](/Users/jenniferliu/Documents/Tree/crc.nwk.png)
-- The raw data was processed by [prepare_data.R](https://raw.githubusercontent.com/jliuob/Arbor/main/Example 2/prepare_data.R "download") to be ready used in Arbor.  
+- The raw data was processed by [prepare_data.R](https://raw.githubusercontent.com/jliuob/Arbor/main/Example 2/prepare_data.R) to be ready used in Arbor.  
 - [Example 2 script](https://raw.githubusercontent.com/jliuob/Arbor/main/example-2.zip "download")
 
 
