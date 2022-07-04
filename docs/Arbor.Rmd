@@ -34,15 +34,15 @@ knitr::opts_chunk$set(echo = TRUE)
 * [R Shiny](https://shiny.rstudio.com/)-R package
 
 ## Arbor Workflows
-![](/Users/jenniferliu/Documents/Tree/workflow.png)
+![](https://raw.githubusercontent.com/jliuob/Arbor/main/workflow.png)
 
 ## Case Study 1
-![Figure 1](/Users/jenniferliu/Documents/Tree/tree.nwk.jpg)
+![Figure 1](https://raw.githubusercontent.com/jliuob/Arbor/main/tree.nwk.jpg)
 - A simple example for demonstration purposes. [Example 1 script](https://raw.githubusercontent.com/jliuob/Arbor/main/example-1.zip "download")    
 - The hierarchical tree stems correspond to the y-axis of the heatmap and the bar plot.  
 
 ## Case Study 2
-![Figure 2](/Users/jenniferliu/Documents/Tree/crc.nwk.png)
+![Figure 2](https://raw.githubusercontent.com/jliuob/Arbor/main/crc.nwk.png)
 - The raw data was processed by [prepare_data.R](https://raw.githubusercontent.com/jliuob/Arbor/main/Example 2/prepare_data.R) to be ready used in Arbor.  
 - [Example 2 script](https://raw.githubusercontent.com/jliuob/Arbor/main/example-2.zip "download")
 
