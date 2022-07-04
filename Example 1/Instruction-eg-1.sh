@@ -1,0 +1,4 @@
+Instruction:
+1. In the section "Data Upload", first upload the tree file for example 1, "tree.nwk", at "Step 1: Tree". Once the file is successfully uploaded, the number of tree plot(s) would become 1 at "Upload Status". Then, please upload the csv files "heatmap.csv" and/or "bar.csv"at "Step 2: Heatmap" and/or "Step 2: Bar Plot". Once the files are successfully uploaded, the number of heatmap(s) and/or bar plot(s) would become 1 at "Upload Status". 
+
+2. Once the files are all successfully uploaded, the integrated plot is displayed in the "Plots" section. The plot width can be adjusted at "Advanced Options". The plots can be downloaded in either .png, .jpg, or .pdf format at "Download".
