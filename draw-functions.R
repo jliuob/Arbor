@@ -22,9 +22,9 @@ drawtree <- function (tr) {
     theme_tree2() + xlim(0, max(tr$edge.length) + 2)
 }
 
-drawhm <- function (hm) {
+drawhm <- function (hm, x, y) {
   # print(hm)
-  ggplot(hm, aes(x = Patient, y = Label)) +
+  ggplot(hm, aes_string(x = x, y = y)) +
     geom_tile(aes(fill = Value)) + scale_fill_viridis_c() +
     theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(),
           axis.text.x = element_text(
@@ -57,7 +57,7 @@ draw1 <- function(data) {
   if (data$type == 'tree') {
     drawtree(data$data)
   } else if (data$type == 'heatmap') {
-    drawhm(data$data)
+    drawhm(data$data, x = data$x, y = data$y)
   } else if (data$type == 'barplot') {
     drawbar(data$data)
   }
