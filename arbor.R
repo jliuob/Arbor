@@ -293,7 +293,7 @@ ui <- dashboardPage(
             ),
             
             tabItem(tabName = 'contact',
-                    "Authors: Xiaowei Zhan, Jennifer Liu.\nGithub: https://github.com/jliuob/Tree.git"
+                    "Authors: Xiaowei Zhan, Jennifer Liu.\nGithub: https://github.com/jliuob/Arbor"
             )
         )
     ))

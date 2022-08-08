@@ -13,7 +13,7 @@ drawtree <- function (tr) {
     color = "navyblue",
     size = 1,
     ladderize = TRUE
-  ) +
+  ) + 
     geom_tiplab(colour = "navyblue",
                 size = 2, offset=0.2,
                 align = T) +
@@ -22,10 +22,9 @@ drawtree <- function (tr) {
     theme_tree2() + xlim(0, max(tr$edge.length) + 2)
 }
 
-drawhm <- function (hm) {
-  # print(hm)
-  ggplot(hm, aes(x = Patient, y = Label)) +
-    geom_tile(aes(fill = Value)) + scale_fill_viridis_c() +
+drawhm <- function (hm, x, y) {
+  ggplot(hm, aes_string("x", "y")) +
+    geom_tile(aes(fill = fill)) + scale_fill_viridis_c() +
     theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(),
           axis.text.x = element_text(
             angle = 90,
@@ -34,8 +33,8 @@ drawhm <- function (hm) {
           ))
 } 
 
-drawbar <- function (bar) {
-  ggplot(bar, aes(Label, Pvalue)) +
+drawbar <- function (bar, x, y) {
+  ggplot(bar, aes_string("x", "y")) +
     geom_col(aes(fill = Group)) +
     # geom_text(aes(label = Label, y = Value)) +
     coord_flip() +
@@ -50,8 +49,6 @@ drawbar <- function (bar) {
       legend.box.background = element_rect(fill='transparent')
     )
 }
-
-## TODO: need to deal with names with flexibility
 
 draw1 <- function(data) {
   if (data$type == 'tree') {
