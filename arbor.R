@@ -356,8 +356,11 @@ server <- function(input, output, session) {
         message("Upload button pressed!")
         print("obs event: heatmap.plot")
         if (!is.null(ret.hm$data())) {
+          # print("ret.hm", ret.hm)
             v$l[[length(v$l) + 1]] <- list(type = 'heatmap',
-                                           data = ret.hm$data())
+                                           data = ret.hm$data(),
+                                           x = ret.hm$values()[1],
+                                           y = ret.hm$values()[2])
             reset("heatmap")
         }
     })

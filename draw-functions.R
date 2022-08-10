@@ -23,8 +23,14 @@ drawtree <- function (tr) {
 }
 
 drawhm <- function (hm, x, y) {
+<<<<<<< HEAD
   ggplot(hm, aes_string("x", "y")) +
     geom_tile(aes(fill = fill)) + scale_fill_viridis_c() +
+=======
+  # print(hm)
+  ggplot(hm, aes_string(x = x, y = y)) +
+    geom_tile(aes(fill = Value)) + scale_fill_viridis_c() +
+>>>>>>> 559bc55803eea14b321b846428322d20d188886b
     theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(),
           axis.text.x = element_text(
             angle = 90,
@@ -54,7 +60,7 @@ draw1 <- function(data) {
   if (data$type == 'tree') {
     drawtree(data$data)
   } else if (data$type == 'heatmap') {
-    drawhm(data$data)
+    drawhm(data$data, x = data$x, y = data$y)
   } else if (data$type == 'barplot') {
     drawbar(data$data)
   }
