@@ -340,7 +340,7 @@ server <- function(input, output, session) {
         session,
         select.header.labels = select.header.labels,
         select.header.values = select.header.values,
-        example.file.name = example.file.name,
+        example.file.name = "heatmap.csv",
         upload.button = upload.button.hm
     )
     output$table.hm <- renderTable({
@@ -370,7 +370,7 @@ server <- function(input, output, session) {
         session,
         select.header.labels = select.header.labels,
         select.header.values = select.header.values,
-        example.file.name = example.file.name,
+        example.file.name = "bar.csv",
         upload.button = upload.button.bar
     )
     output$table.bar <- renderTable({
