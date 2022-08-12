@@ -288,7 +288,7 @@ ui <- dashboardPage(
                                         solidHeader = TRUE,
                                         collapsible = TRUE,
                                         collapsed = TRUE,
-                                        numericInput("plot.width", "Plot width on screen", 500, min = 500)))),
+                                        numericInput("plot.width", "Plot width on screen", 700, min = 500)))),
 
             ),
             
@@ -387,7 +387,9 @@ server <- function(input, output, session) {
         print("obs event: barplot")
         if (!is.null(ret.bar$data())) {
             v$l[[length(v$l) + 1]] <- list(type = 'barplot',
-                                           data = ret.bar$data())
+                                           data = ret.bar$data(),
+                                           x = ret.bar$values()[1],
+                                           y = ret.bar$values()[2])
             reset("barplot")
         }
     })

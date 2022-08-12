@@ -47,8 +47,7 @@ prepare_data <- function(psObject, csvFile, outputPrefix) {
   index_bar<-match(bar_prepared$base, taxa_names(tree_prepared))
   bar_prepared<-bar_prepared[index_bar,]
   bar_prepared$pvalue<--log10(bar_prepared$pvalue)
-  bar_prepared$Value<-bar_prepared$pvalue
-  bar_prepared$Pvalue<-bar_prepared$Value
+  bar_prepared$Pvalue<-bar_prepared$pvalue
   bar_prepared$Group<-bar_prepared$enrich_group
   bar_prepared$Label<-sub(pattern = "^.*\\|", replacement = "", bar_prepared$name)
   
